@@ -1,0 +1,11 @@
+{
+  "include": ["src/**/*"],                   // Incluye todos los archivos en el directorio src.
+  "exclude": ["node_modules", "dist"],  
+   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+    
