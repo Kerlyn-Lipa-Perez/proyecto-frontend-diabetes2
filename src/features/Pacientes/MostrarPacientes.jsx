@@ -13,10 +13,19 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import IconUserAdd from "../../Icons/IconUserAdd";
+import Delete from "../../Icons/TrashIcon";
+import TrashIcon from "../../Icons/TrashIcon";
+import ViewPaciente from "../../Icons/ViewPaciente";
 const URI = "http://localhost:4000/api/pacientes";
 
 
+
+
+
 const CompMostrarPacientes = () => {
+
+
+
   const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +46,7 @@ const CompMostrarPacientes = () => {
 
   const deletePaciente = async (id) => {
     try {
-      await axios.delete(`${URI}${id}`);
+     await axios.delete(`${URI}/${id}`);
       getPacientes();
     } catch (error) {
       return <h1> Error al eliminar el paciente : `${error}`</h1>;
@@ -46,29 +55,32 @@ const CompMostrarPacientes = () => {
 
   return (
     <>
-    <br />
-    <br />
+      <br />
+      <br />
       <Link
         to="/create"
-        className=" m-5 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5  py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        className="inline-flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ml-6"
       >
-        {" "}
-        Agregar {IconUserAdd}
+        Agregar
+        <IconUserAdd className="ml-2" /> 
       </Link>
-      <Table className="m-5" >
-        <TableCaption> ....</TableCaption>
+      <Table className="m-5">
+        <TableCaption> </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Nombres</TableHead>
-            <TableHead className="w-[100px]">Apellidos</TableHead>
-            <TableHead className="w-[100px]">DNI</TableHead>
-            <TableHead className="w-[100px]">Telefono</TableHead>
-            <TableHead className="w-[100px]">Genero</TableHead>
-            <TableHead className="w-[100px]">% de Riego de diabetes</TableHead>
-            <TableHead className="w-[100px]">Acciones</TableHead>
+            <TableHead className="w-[100px] text-center">Nombres</TableHead>
+            <TableHead className="w-[100px] text-center">Apellidos</TableHead>
+            <TableHead className="w-[100px] text-center">DNI</TableHead>
+            <TableHead className="w-[100px] text-center">Telefono</TableHead>
+            <TableHead className="w-[100px] text-center">Genero</TableHead>
+            <TableHead className="w-[100px] text-center">
+              % de Riego de diabetes
+            </TableHead>
+            <TableHead className="w-[100px] text-center">Acciones</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+
+        <TableBody className=" text-center">
           {pacientes.map((paciente) => (
             <TableRow key={paciente.id}>
               <TableCell className="font-medium">{paciente.nombres}</TableCell>
@@ -81,24 +93,28 @@ const CompMostrarPacientes = () => {
 
               <TableCell className="text-center">...</TableCell>
               <TableCell>
-                <a
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  to={`/edit/${paciente.id}`}
-                >
-                  Editar
-                </a>
-                <Button 
+                <Link to={`/edit/${paciente.id}`}>
+                  <Button className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Ver mas
+                  </Button>
+                </Link>
+
+                <Link to={`/edit/${paciente.id}`}>
+                  <Button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Editar
+                  </Button>
+                </Link>
+                <Button
                   className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   onClick={() => deletePaciente(paciente.id)}
                 >
-                  Eliminar
+                  Eliminar <TrashIcon className="ml-2 " />
                 </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      
     </>
   );
 };

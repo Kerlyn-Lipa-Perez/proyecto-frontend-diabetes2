@@ -1,23 +1,64 @@
 import { Input } from "@/components/ui/input";
+import IconoDiabetes from "../../Icons/IconoLogo";
+import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export function Login() {
+const URI = "http://localhost:4000/api/login";
 
-  
+const loading = false;
+function Login() {
+  const [login, setLogin] = useState(false);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  const handleLoggingIn = (e) => {
+    e.preventDefault();
+    console.log({email: email, password: password});
+
+    const data = {
+      email: email,
+      password: password
+    };
+    fetch(URI, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.token);
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          setLogin(true);
+          navigate("/");
+        } else {
+          setLogin(false);
+          <Navigate to="/login" />
+
+        }
+        
+      })
+      .catch(error =>{ console.log(error)});
+      
+    
+  };
 
   return (
     <>
       <div className=" m-40 flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
         <div className="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
-          <div>
-            <img src="/favicon.svg" width="50" alt="Logo" />
+          <div className="flex justify-center items-center h-full">
+            <IconoDiabetes className="align-middle" />
           </div>
           <h1 className="text-3xl font-bold  text-[#4B5563] my-auto">
             Aplicativo de diabetes
           </h1>
         </div>
-        <div className="text-sm font-light text-[#6B7280] pb-8 mx-auto">
-          .
-        </div>
+        <div className="text-sm font-light text-[#6B7280] pb-8 mx-auto">.</div>
         <form className="flex flex-col">
           <div className="pb-2">
             <label
@@ -45,12 +86,16 @@ export function Login() {
                 </svg>
               </span>
               <input
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
                 type="email"
                 name="email"
                 id="email"
                 className="pl-12 mb-2 bg-gray-50 text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring ring-transparent focus:ring-1 focus:outline-none focus:ring-gray-400 block w-full p-2.5 rounded-l-lg py-3 px-4"
-                placeholder="name@gmail.com"
+                placeholder="name@email.com"
                 autoComplete="off"
+                required
               />
             </div>
           </div>
@@ -82,27 +127,36 @@ export function Login() {
                 </svg>
               </span>
               <input
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
                 type="password"
                 name="password"
                 id="password"
                 placeholder="••••••••••"
                 className="pl-12 mb-2 bg-gray-50 text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring ring-transparent focus:ring-1 focus:outline-none focus:ring-gray-400 block w-full p-2.5 rounded-l-lg py-3 px-4"
                 autoComplete="new-password"
+                required
               />
             </div>
           </div>
           <button
+            onClick={handleLoggingIn}
             type="submit"
             className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
+            disabled={loading} // Deshabilitar el botón si está cargando
           >
-            Iniciar Sesión
+            {loading ? "Cargando..." : "Iniciar Sesión"}
           </button>
           <div className="text-sm font-light text-[#6B7280] text-center">
             No tienes una cuenta todavia?
             <br />
-            <a href="/" className="font-medium text-[#4F46E5] hover:underline">
+            <Link
+              to="/registro"
+              className="font-medium text-[#4F46E5] hover:underline"
+            >
               Registrate
-            </a>
+            </Link>
           </div>
         </form>
       </div>

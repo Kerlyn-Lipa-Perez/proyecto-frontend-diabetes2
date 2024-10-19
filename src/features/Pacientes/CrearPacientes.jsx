@@ -17,6 +17,9 @@ import axios from "axios";
 import IconUserAdd from "../../Icons/IconUserAdd";
 
 
+
+
+
 // Definir el esquema de validación usando Zod
 const formSchema = z.object({
   nombres: z.string().min(4, {
@@ -26,7 +29,7 @@ const formSchema = z.object({
     message: "Los apellidos deben tener al menos 4 caracteres.",
   }),
   dni: z.number().min(8, {
-    message: "El DNI debe tener al menos 9 caracteres.",
+    message: "El DNI debe tener al menos 8 caracteres.",
   }),
   telefono: z.number().min(9, {
     message: "El teléfono debe tener al menos 9 caracteres.",
@@ -42,6 +45,9 @@ const formSchema = z.object({
 const URI = "http://localhost:4000/api/pacientes";
 
 export function CompCreatePacientes() {
+
+
+
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -190,7 +196,7 @@ export function CompCreatePacientes() {
 
           <FormField
             control={form.control}
-            name="Embarazos"
+            name="presion"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Presion Arterial</FormLabel>
