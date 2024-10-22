@@ -1,8 +1,11 @@
 import { Input } from "@/components/ui/input";
 import IconoDiabetes from "../../Icons/IconoLogo";
 import { Link, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import loginServices from "../../services/login";
+import axios from "axios";
+import setToken from "../Pacientes/CrearPacientes";
 
 const URI = "http://localhost:4000/api/login";
 
@@ -11,45 +14,84 @@ function Login() {
   const [login, setLogin] = useState(false);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleLoggingIn = (e) => {
+useEffect(()=>{
+  const loggedUserJSON = window.localStorage.getItem("loggedInUser");
+  if(loggedUserJSON){
+    const user = JSON.parse(loggedUserJSON);
+    setUser(user);
+    //setToken(user.token);
+
+  }
+
+},[]);
+
+
+
+  const handleLoggingIn = async(e) => {
     e.preventDefault();
-    console.log({email: email, password: password});
-
-    const data = {
-      email: email,
-      password: password
-    };
-    fetch(URI, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.token);
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          setLogin(true);
-          navigate("/");
-        } else {
-          setLogin(false);
-          <Navigate to="/login" />
-
-        }
-        
-      })
-      .catch(error =>{ console.log(error)});
-      
     
+    try {
+       const data = {
+         email: email,
+         password: password,
+       };
+
+      window.localStorage.setItem("loggedInUser", JSON.stringify(data));
+
+
+      setUser(user);
+     
+
+        
+      
+    } catch (error) {
+      setErrorMessage('Error al iniciar sesión');
+
+      setTimeout(()=>{
+        setErrorMessage(null);
+      },5000)
+
+      
+    }
+   
+  
+
+    try {
+      const response = await axios.post(URI, {
+        email,
+        password,
+      });
+
+      const data = response.data;
+
+      if (data.token) {
+        // Guardar el token en localStorage
+        window.localStorage.setItem("loggedInUser", JSON.stringify(data));
+        setUser(data);
+        setLogin(true);
+
+        // Navegar a la página principal o a donde desees
+        navigate("/");
+
+      } else {
+        setLogin(false);
+        setErrorMessage("Credenciales incorrectas");
+      }
+    } catch (error) {
+      setErrorMessage("Error al iniciar sesión");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
 
   return (
     <>
-      <div className=" m-40 flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
+      <div  className=" m-40 flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
         <div className="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
           <div className="flex justify-center items-center h-full">
             <IconoDiabetes className="align-middle" />
@@ -59,7 +101,7 @@ function Login() {
           </h1>
         </div>
         <div className="text-sm font-light text-[#6B7280] pb-8 mx-auto">.</div>
-        <form className="flex flex-col">
+        <form  className="flex flex-col">
           <div className="pb-2">
             <label
               htmlFor="email"

@@ -13,9 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import IconUserAdd from "../../Icons/IconUserAdd";
-import Delete from "../../Icons/TrashIcon";
-import TrashIcon from "../../Icons/TrashIcon";
-import ViewPaciente from "../../Icons/ViewPaciente";
+
 const URI = "http://localhost:4000/api/pacientes";
 
 
@@ -36,11 +34,12 @@ const CompMostrarPacientes = () => {
   //Metodos
   const getPacientes = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/pacientes");
+      const response = await axios.get(URI);
       setPacientes(response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error al obtener los pacientes:", error);
+
     }
   };
 
@@ -52,6 +51,15 @@ const CompMostrarPacientes = () => {
       return <h1> Error al eliminar el paciente : `${error}`</h1>;
     }
   };
+  const createPaciente = async (id) => {
+    try {
+      
+      
+    } catch (error) {
+      
+    }
+
+  };
 
   return (
     <>
@@ -61,7 +69,7 @@ const CompMostrarPacientes = () => {
         to="/create"
         className="inline-flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ml-6"
       >
-        Agregar
+        Agregar Paciente
         <IconUserAdd className="ml-2" /> 
       </Link>
       <Table className="m-5">
@@ -91,7 +99,7 @@ const CompMostrarPacientes = () => {
               <TableCell className="font-medium">{paciente.telefono}</TableCell>
               <TableCell className="font-medium">{paciente.genero}</TableCell>
 
-              <TableCell className="text-center">...</TableCell>
+              <TableCell className="text-center"> Positivo</TableCell>
               <TableCell>
                 <Link to={`/edit/${paciente.id}`}>
                   <Button className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -108,7 +116,7 @@ const CompMostrarPacientes = () => {
                   className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   onClick={() => deletePaciente(paciente.id)}
                 >
-                  Eliminar <TrashIcon className="ml-2 " />
+                  Eliminar 
                 </Button>
               </TableCell>
             </TableRow>

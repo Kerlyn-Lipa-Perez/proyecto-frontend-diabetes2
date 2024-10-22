@@ -10,23 +10,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export function Registro() {
+const URI = "http://localhost:4000/api/register";
+
+function Registro() {
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
     password: "",
     confirmPassword: "",
-    dni : "",
-    telefono : ""
+    dni: "",
+    telefono: "",
   });
 
-
-
-
-
-
+  const [loading, setLoading] = useState(false); // Para controlar el estado de carga
+  const navigate = useNavigate(); // Cambiar por useNavigate para redirigir
+  // const { toast } = useToast();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -34,23 +36,37 @@ export function Registro() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      Toaster({
-        title: "Error",
-        description: "Las contraseñas no coinciden",
-        variant: "destructive",
-      });
+      console.log("Las contraseñas no coinciden");
       return;
     }
-    // Aquí iría la lógica para enviar los datos al servidor
+
     console.log("Datos del formulario:", formData);
-    Toaster({
-      title: "Registro exitoso",
-      description: "Tu cuenta ha sido creada",
-    });
+
+
+    // Envío al backend
+    setLoading(true); // Activa el estado de carga
+    try {
+      const response = await axios
+        .post(URI, formData)
+        .then((res) => console.log("Registro exitoso", res))
+        .catch((err) => console.log("Error al registrar", err));
+      if (response.status === 201) {
+        console.log("Usuario registrado con éxito");
+        // Redirigir a login u otra página si es necesario
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      
+    } finally {
+      setLoading(false); // Desactiva el estado de carga
+    }
   };
+
+ 
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">

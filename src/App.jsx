@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./App.css";
 import CompMostrarPacientes from "./features/Pacientes/MostrarPacientes";
 import { BrowserRouter, Route, Routes , Navigate} from "react-router-dom";
-import CompCreatePacientes from "./features/Pacientes/CrearPacientes";
+import {CompCreatePacientes} from "./features/Pacientes/CrearPacientes";
 import Login from "./features/Auth/Login";
 import Registro from "./features/Auth/Registro";
 
@@ -45,31 +45,21 @@ if (token) {
   }
 }
 
+//window.localStorage.setItem("token", token);
+
 console.log("¿Autenticado?", isAuthenticated);
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          {isAuthenticated ? (
-            <>
+        <Routes> 
               <Route path="/" element={<CompMostrarPacientes />} />
               <Route path="/create" element={<CompCreatePacientes />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />
-              
-       
-            
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />
-              
-             
-            </>
-          )}
+              <Route path="/registro" element={<Registro />} />     
+        
+          
         </Routes>
       </BrowserRouter>
     </div>

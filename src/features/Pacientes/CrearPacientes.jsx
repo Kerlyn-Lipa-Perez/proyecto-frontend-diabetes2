@@ -17,48 +17,117 @@ import axios from "axios";
 import IconUserAdd from "../../Icons/IconUserAdd";
 
 
-
+let token = null;
 
 
 // Definir el esquema de validación usando Zod
 const formSchema = z.object({
-  nombres: z.string().min(4, {
-    message: "Los nombres deben tener al menos 4 caracteres.",
+  nombres: z
+    .string()
+    .min(4, { message: "Los nombres deben tener al menos 4 caracteres." })
+    .max(50, { message: "Los nombres no pueden exceder los 50 caracteres." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Los nombres solo deben contener letras y espacios.",
+    }),
+
+  apellidos: z
+    .string()
+    .min(4, { message: "Los apellidos deben tener al menos 4 caracteres." })
+    .max(50, { message: "Los apellidos no pueden exceder los 50 caracteres." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Los apellidos solo deben contener letras y espacios.",
+    }),
+
+  dni: z
+    .string()
+    .min(8, { message: "El DNI debe tener al menos 8 caracteres." })
+    .max(8, { message: "El DNI debe tener un máximo de 8 caracteres." })
+    .regex(/^[0-9]+$/, { message: "El DNI debe contener solo números." }),
+
+  telefono: z
+    .string()
+    .min(9, { message: "El teléfono debe tener al menos 9 dígitos." })
+    .max(15, { message: "El teléfono no debe exceder los 15 dígitos." })
+    .regex(/^[0-9]+$/, { message: "El teléfono debe contener solo números." }),
+
+  genero: z.enum(["masculino", "femenino", "otro"], {
+    message: "Por favor, selecciona un género válido.",
   }),
-  apellidos: z.string().min(4, {
-    message: "Los apellidos deben tener al menos 4 caracteres.",
-  }),
-  dni: z.number().min(8, {
-    message: "El DNI debe tener al menos 8 caracteres.",
-  }),
-  telefono: z.number().min(9, {
-    message: "El teléfono debe tener al menos 9 caracteres.",
-  }),
-  genero: z.string().nonempty("Por favor, selecciona un género."),
-  embarazos: z.number().optional(),
-  presion: z.number().optional(),
-  grosor: z.number().optional(),
-  insulina: z.number().optional(),
-  imc: z.number().min(1, { message: "Debe colocar el IMC del paciente" }),
+
+
+  embarazos: z
+    .number()
+    .int({ message: "Los embarazos deben ser un número entero." })
+    .min(0, { message: "El número de embarazos no puede ser negativo." })
+    .optional(),
+
+
+  presion: z
+    .number({ invalid_type_error: "La presión arterial debe ser un número." })
+    .min(0, { message: "La presión arterial no puede ser negativa." })
+    .max(300, { message: "La presión arterial parece irreal." })
+    .optional(),
+
+
+  grosor: z
+    .number({ invalid_type_error: "El grosor debe ser un número." })
+    .min(0, { message: "El grosor no puede ser negativo." })
+    .optional(),
+
+  // Insulina es opcional, pero debe ser un número positivo
+  insulina: z
+    .number({ invalid_type_error: "La insulina debe ser un número." })
+    .min(0, { message: "La insulina no puede ser negativa." })
+    .optional(),
+
+  // IMC debe ser obligatorio, con un valor mínimo y máximo razonable
+  imc: z
+    .number({ invalid_type_error: "El IMC debe ser un número." })
+    .min(1, { message: "Debe colocar el IMC del paciente." })
+    .max(100, { message: "El valor del IMC parece irreal." }),
 });
 
 const URI = "http://localhost:4000/api/pacientes";
 
+// const setToken = async (newToken) => {
+//   token = `Bearer ${newToken}`;
+// };
+
 export function CompCreatePacientes() {
-
-
 
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      nombres: "",
+      apellidos: "",
+      dni: "",
+      telefono: "",
+      genero: "",
+      embarazos: undefined,
+      presion: undefined,
+      grosor: undefined,
+      insulina: undefined,
+      imc: undefined,
+    },
   });
+
+  const setToken =  (newToken) => {
+    token = `Bearer ${newToken}`;
+  };
 1
   const { handleSubmit } = form;
 
   const storePaciente = async (data) => {
+    const config = {
+      headers: {
+        Autorization: `Bearer ${localStorage.getItem("loggedInUser")}`,
+      },
+    };
     try {
-      await axios.post(URI, data);
-      navigate("/pacientes"); // Redirigir a la lista de pacientes
+      await axios.post(URI, data,config);
+      navigate("/"); // Redirigir a la lista de pacientes
     } catch (error) {
       console.error("Error al crear el paciente:", error);
     }
@@ -69,7 +138,6 @@ export function CompCreatePacientes() {
       <h1 className="text-2xl font-bold text-center">Agregar Paciente</h1>
       <Form {...form}>
         <form onSubmit={handleSubmit(storePaciente)} className="space-y-8">
-
           {/* Campo de Nombres */}
           <FormField
             control={form.control}
@@ -133,7 +201,7 @@ export function CompCreatePacientes() {
                 <FormLabel>Teléfono</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
+                    type="text"
                     placeholder="Ingresa el teléfono"
                     {...field}
                   />
@@ -170,27 +238,28 @@ export function CompCreatePacientes() {
           />
 
           {/* Campo de Embarazos */}
-
-          <FormField
-            control={form.control}
-            name="Embarazos"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Numero de Embarazos</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Ingresa el numero de embarazos si es el caso"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Introduce el número de embarazos
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {form.watch("genero") === "femenino" && (
+            <FormField
+              control={form.control}
+              name="embarazos"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Número de Embarazos</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Ingresa el número de embarazos si es el caso"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Introduce el número de embarazos.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           {/* Campo de Presion Arterial */}
 
@@ -270,9 +339,7 @@ export function CompCreatePacientes() {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  
-                </FormDescription>
+                <FormDescription></FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -280,6 +347,7 @@ export function CompCreatePacientes() {
 
           {/* Campo de  */}
 
+          {/* Boton  */}
           <Button
             onSubmit={handleSubmit(storePaciente)}
             type="submit"
@@ -294,4 +362,4 @@ export function CompCreatePacientes() {
   );
 }
 
-export default CompCreatePacientes;
+export default {CompCreatePacientes};
