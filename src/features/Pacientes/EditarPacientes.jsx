@@ -99,6 +99,7 @@ const CompEditarPaciente = () => {
 
           // Rellena el formulario con los datos del paciente
           form.reset(data);
+          
         } catch (error) {
           console.error("Error al cargar los datos del paciente:", error);
         }
