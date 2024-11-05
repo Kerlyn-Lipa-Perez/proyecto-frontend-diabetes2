@@ -1,11 +1,14 @@
-import { useState } from "react";
 
-import "./App.css";
 import CompMostrarPacientes from "./features/Pacientes/MostrarPacientes";
 import { BrowserRouter, Route, Routes , Navigate} from "react-router-dom";
 import {CompCreatePacientes} from "./features/Pacientes/CrearPacientes";
 import Login from "./features/Auth/Login";
 import Registro from "./features/Auth/Registro";
+import SidebarComponent from "./components/SidebarComponent";
+import Predicciones from "./features/prediciones/Predicciones";
+import EditarPacientes from "./features/Pacientes/EditarPacientes";
+import LeerPacientes from "./features/Pacientes/LeerPacientes";
+
 
 function parseJwt(token) {
   if (!token) {
@@ -45,21 +48,26 @@ if (token) {
   }
 }
 
-//window.localStorage.setItem("token", token);
+window.localStorage.setItem("token", token);
 
 console.log("¿Autenticado?", isAuthenticated);
+
+
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes> 
-              <Route path="/" element={<CompMostrarPacientes />} />
-              <Route path="/create" element={<CompCreatePacientes />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />     
-        
-          
+        <Routes>
+
+          <Route path="/"  element={<CompMostrarPacientes />} />
+          <Route path="/create" element={<CompCreatePacientes />} /> 
+          <Route path="/edit/:id" element={<EditarPacientes />} />
+          <Route path="/read/:id" element={<LeerPacientes />} />
+
+          <Route path="/prediciones" element={<Predicciones />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
         </Routes>
       </BrowserRouter>
     </div>

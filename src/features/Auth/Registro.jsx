@@ -43,6 +43,8 @@ function Registro() {
       return;
     }
 
+    
+
     console.log("Datos del formulario:", formData);
 
 

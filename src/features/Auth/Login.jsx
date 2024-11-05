@@ -9,6 +9,8 @@ import setToken from "../Pacientes/CrearPacientes";
 
 const URI = "http://localhost:4000/api/login";
 
+const URI_USERS = "http://localhost:4000/api/users";
+
 const loading = false;
 function Login() {
   const [login, setLogin] = useState(false);
@@ -18,69 +20,40 @@ function Login() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
 
-useEffect(()=>{
-  const loggedUserJSON = window.localStorage.getItem("loggedInUser");
-  if(loggedUserJSON){
-    const user = JSON.parse(loggedUserJSON);
-    setUser(user);
-    //setToken(user.token);
-
-  }
-
-},[]);
-
-
-
-  const handleLoggingIn = async(e) => {
-    e.preventDefault();
-    
-    try {
-       const data = {
-         email: email,
-         password: password,
-       };
-
-      window.localStorage.setItem("loggedInUser", JSON.stringify(data));
-
-
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedInUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
       setUser(user);
-     
-
-        
-      
-    } catch (error) {
-      setErrorMessage('Error al iniciar sesión');
-
-      setTimeout(()=>{
-        setErrorMessage(null);
-      },5000)
-
-      
     }
-   
-  
+  }, []);
 
+  const handleLoggingIn = async (event) =>{
+    event.preventDefault();
     try {
       const response = await axios.post(URI, {
         email,
         password,
       });
 
-      const data = response.data;
+      console.log(response);
 
-      if (data.token) {
-        // Guardar el token en localStorage
-        window.localStorage.setItem("loggedInUser", JSON.stringify(data));
-        setUser(data);
-        setLogin(true);
+      // const data = {
+      //   userId: response.id,
+      //   email: response.email,
+      //   password: response.password,
+      // };
+      // console.log(data);
 
-        // Navegar a la página principal o a donde desees
-        navigate("/");
+      // Guarda el usuario logeado en localStorage y en el estado
+      window.localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(response.data)
+      );
+      setUser(response.data);
+      console.log(response.data);
+      navigate("/"); // Redirige al inicio después de iniciar sesión
 
-      } else {
-        setLogin(false);
-        setErrorMessage("Credenciales incorrectas");
-      }
     } catch (error) {
       setErrorMessage("Error al iniciar sesión");
       setTimeout(() => {
@@ -90,8 +63,8 @@ useEffect(()=>{
   };
 
   return (
-    <>
-      <div  className=" m-40 flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl">
+    <form onSubmit={handleLoggingIn}>
+      <div className=" m-40 flex flex-col w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl overflow-x-hidden max-w-full ">
         <div className="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
           <div className="flex justify-center items-center h-full">
             <IconoDiabetes className="align-middle" />
@@ -101,7 +74,7 @@ useEffect(()=>{
           </h1>
         </div>
         <div className="text-sm font-light text-[#6B7280] pb-8 mx-auto">.</div>
-        <form  className="flex flex-col">
+        <div className="flex flex-col">
           <div className="pb-2">
             <label
               htmlFor="email"
@@ -186,7 +159,7 @@ useEffect(()=>{
             onClick={handleLoggingIn}
             type="submit"
             className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
-            disabled={loading} // Deshabilitar el botón si está cargando
+            disabled={loading}
           >
             {loading ? "Cargando..." : "Iniciar Sesión"}
           </button>
@@ -200,9 +173,9 @@ useEffect(()=>{
               Registrate
             </Link>
           </div>
-        </form>
+        </div>
       </div>
-    </>
+    </form>
   );
 }
 
