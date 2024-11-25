@@ -8,6 +8,7 @@ import SidebarComponent from "./components/SidebarComponent";
 import Predicciones from "./features/prediciones/Predicciones";
 import EditarPacientes from "./features/Pacientes/EditarPacientes";
 import LeerPacientes from "./features/Pacientes/LeerPacientes";
+import Estadisticas from "./features/Pacientes/Estadisticas";
 
 
 function parseJwt(token) {
@@ -56,18 +57,18 @@ console.log("¿Autenticado?", isAuthenticated);
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" >
       <BrowserRouter>
         <Routes>
-
-          <Route path="/"  element={<CompMostrarPacientes />} />
-          <Route path="/create" element={<CompCreatePacientes />} /> 
+          <Route path="/" element={<CompMostrarPacientes />} />
+          <Route path="/create" element={<CompCreatePacientes />} />
           <Route path="/edit/:id" element={<EditarPacientes />} />
           <Route path="/read/:id" element={<LeerPacientes />} />
 
           <Route path="/prediciones" element={<Predicciones />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/stats" element={<Estadisticas />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -12,17 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import IconUserAdd from "../../Icons/IconUserAdd";
 //Iconos
@@ -31,16 +21,19 @@ import EyeIcon from "../../Icons/ViewPaciente";
 import EditIcon from "../../Icons/editIcon";
 
 import TrashIcon from "../../Icons/TrashIcon";
-import { Home, LogOut, Users } from "lucide-react";
+
 import {MainLayaout} from "../../layout";
-import DataTable from "react-data-table-component";
 
+import {TableSkeleton} from "./TableSkeleton";
 
+const URI_PREDICIONES = "http://localhost:4000/api/predictions";
 const URI_PACIENTES = "http://localhost:4000/api/pacientes";
 
 const CompMostrarPacientes = () => {
   const [pacientes, setPacientes] = useState([]);
+  const [predicion, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getPacientes();
@@ -49,104 +42,162 @@ const CompMostrarPacientes = () => {
   //Obtener pacientes
   const getPacientes = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(URI_PACIENTES);
-      setPacientes(response.data);
+
+      console.log("Datos recibidos:", response.data);
+
+      const pacientesData = Array.isArray(response.data)
+        ? response.data
+        : response.data.pacientes || [];
+
+      // Sort pacientes by most recent, with fallback to prevent errors
+      const sortedPacientes = pacientesData.sort((a, b) => {
+        const dateA = a.createdAt || a.fecha_creacion || 0;
+        const dateB = b.createdAt || b.fecha_creacion || 0;
+        return new Date(dateB) - new Date(dateA);
+      });
+
+      setPacientes(sortedPacientes);
       setLoading(false);
+
     } catch (error) {
       console.error("Error al obtener los pacientes:", error);
     }
   };
 
+
   const deletePaciente = async (id) => {
     try {
-      await axios.delete(`${URI}/${id}`);
+      await axios.delete(`${URI_PACIENTES}/${id}`);
       getPacientes();
     } catch (error) {
       return <h1> Error al eliminar el paciente : `${error}`</h1>;
     }
   };
-  const createPaciente = async (id) => {
-    try {
-    } catch (error) {}
-  };
 
-  return (
-    <>
-      <MainLayaout>
-        <br />
-        <br />
+  return(
+    <MainLayaout>
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Lista de Pacientes</h1>
+          <Link
+            to="/create"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+          >
+            Agregar Paciente
+            <IconUserAdd className="w-4 h-4" />
+          </Link>
+        </div>
 
-        <Table className="m-5">
-          <TableCaption>
-            {" "}
-            <div className="flex-">
-              <Link
-                to="/create"
-                className="inline-flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ml-6"
-              >
-                Agregar Paciente
-                <IconUserAdd className="ml-2 w-4 h-4" />{" "}
-                {/* Ajustar tamaño del ícono */}
-              </Link>
-            </div>{" "}
-          </TableCaption>
-          <TableHeader className="m-0 border-t p-0 even:bg-muted">
-            <TableRow className="">
-              <TableHead className="w-[100px] text-center">Nombres</TableHead>
-              <TableHead className="w-[100px] text-center">Apellidos</TableHead>
-              <TableHead className="w-[100px] text-center">DNI</TableHead>
-              <TableHead className="w-[100px] text-center">Telefono</TableHead>
-              <TableHead className="w-[100px] text-center">Genero</TableHead>
-              <TableHead className="w-[100px] text-center">
-                % de Riego de diabetes
-              </TableHead>
-              <TableHead className="w-[100px]   text-center">
-                Acciones
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+        <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+          {loading ? (
+            <TableSkeleton />
+          ) : (
+            <Table>
+              <TableCaption className="text-center p-3 pb-6">
+                No hay más registros...
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-center whitespace-nowrap">
+                    Nombres
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap">
+                    Apellidos
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap">
+                    DNI
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap hidden sm:table-cell">
+                    Teléfono
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap hidden md:table-cell">
+                    Género
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap">
+                    % Riesgo
+                  </TableHead>
+                  <TableHead className="text-center whitespace-nowrap">
+                    Acciones
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
 
-          <TableBody className=" text-center">
-            {pacientes.map((paciente) => (
-              <TableRow key={paciente.id}>
-                <TableCell className="font-medium">
-                  {paciente.nombres}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {paciente.apellidos}
-                </TableCell>
-                <TableCell className="font-medium">{paciente.DNI}</TableCell>
-                <TableCell className="font-medium">
-                  {paciente.telefono}
-                </TableCell>
-                <TableCell className="font-medium">{paciente.genero}</TableCell>
-
-                <TableCell className="text-center"> Positivo</TableCell>
-                <TableCell>
-                  <Link to={`/view/${paciente.id}`}>
-                    <Button className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                      <EyeIcon />
-                    </Button>
-                  </Link>
-
-                  <Link to={`/edit/${paciente.id}`}>
-                    <Button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                      <EditIcon />
-                    </Button>
-                  </Link>
-                  <Button
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                    onClick={() => deletePaciente(paciente.id)}
+              <TableBody>
+                {pacientes.map((paciente) => (
+                  <TableRow
+                    key={paciente.id}
+                    className="hover:bg-gray-50 text-center justify-center place-items-center"
                   >
-                    <TrashIcon />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </MainLayaout>
-    </>
+                    <TableCell className="font-medium capitalize">
+                      {paciente.nombres}
+                    </TableCell>
+                    <TableCell className="font-medium capitalize">
+                      {paciente.apellidos}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {paciente.DNI}
+                    </TableCell>
+                    <TableCell className="font-medium hidden sm:table-cell">
+                      {paciente.telefono}
+                    </TableCell>
+                    <TableCell className="font-medium hidden md:table-cell capitalize">
+                      {paciente.genero}
+                    </TableCell>
+                    <TableCell
+                      className={`text-center font-medium ${
+                        paciente.predicciones &&
+                        paciente.predicciones.length > 0
+                          ? paciente.predicciones[0].puntaje_riesgo > 70
+                            ? "text-red-600"
+                            : paciente.predicciones[0].puntaje_riesgo > 40
+                            ? "text-yellow-600"
+                            : "text-green-600"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {paciente.predicciones && paciente.predicciones.length > 0
+                        ? `${paciente.predicciones[0].puntaje_riesgo}%`
+                        : "Sin predicción"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        <Link to={`/view/${paciente.id}`}>
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <EyeIcon className="w-4 h-4" />
+                          </Button>
+                        </Link>
+
+                        <Link to={`/edit/${paciente.id}`}>
+                          <Button
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            <EditIcon className="w-4 h-4" />
+                          </Button>
+                        </Link>
+
+                        <Button
+                          size="sm"
+                          className="bg-red-600 hover:bg-red-700 text-white"
+                          onClick={() => deletePaciente(paciente.id)}
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+      </div>
+    </MainLayaout>
   );
 };
 

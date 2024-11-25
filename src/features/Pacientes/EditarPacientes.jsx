@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -82,7 +82,7 @@ const formSchema = z.object({
 const CompEditarPaciente = () => {
   const { userId } = useParams(); // Obtener el ID del paciente desde los parámetros de la URL
   const navigate = useNavigate(); // Para redireccionar después de guardar
-  const [loading, setLoading] = useState(true); // Para mostrar un indicador de carga
+
   
   const form = useForm({
     resolver: zodResolver(formSchema),

@@ -38,7 +38,7 @@ const items = [
   },
   {
     title: "Cerrar sesión",
-    url: "/logout",
+    url: "/login",
     icon: LogOut,
   },
 ];
