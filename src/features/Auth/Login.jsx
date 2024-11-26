@@ -63,7 +63,10 @@ function Login() {
   };
 
   return (
-    <form className="flex place-items-center align-middle justify-center mt-20" onSubmit={handleLoggingIn}>
+    <form
+      className="flex place-items-center align-middle justify-center mt-20"
+      onSubmit={handleLoggingIn}
+    >
       <div className=" m-0 auto flex  flex-col placeitem w-full md:w-1/2 xl:w-2/5 2xl:w-2/5 3xl:w-1/3 mx-auto p-8 md:p-10 2xl:p-12 3xl:p-14 bg-[#ffffff] rounded-2xl shadow-xl overflow-x-hidden max-w-full ">
         <div className="flex flex-col justify-center mx-auto items-center gap-3 pb-4">
           <div className="flex justify-center items-center h-full">
@@ -158,7 +161,7 @@ function Login() {
           <button
             onClick={handleLoggingIn}
             type="submit"
-            className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
+            className="w-full text-[#FFFFFF] bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
             disabled={loading}
           >
             {loading ? "Cargando..." : "Iniciar Sesión"}
@@ -168,7 +171,7 @@ function Login() {
             <br />
             <Link
               to="/registro"
-              className="font-medium text-[#4F46E5] hover:underline"
+              className="font-medium text-blue-600 hover:underline"
             >
               Registrate
             </Link>

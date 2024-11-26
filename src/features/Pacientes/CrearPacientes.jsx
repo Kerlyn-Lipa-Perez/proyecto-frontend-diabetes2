@@ -158,116 +158,174 @@ export function CompCreatePacientes() {
   );
 
   return (
-    <Card className="mx-auto my-10 max-w-2xl">
-      <CardHeader>
-        <CardTitle className="text-center">Crear Paciente</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-2 gap-4"
-          >
-            <FormField
-              control={form.control}
-              name="nombres"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombres</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ingresa los nombres" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="apellidos"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Apellidos</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ingresa los apellidos" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dni"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>DNI</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ingresa el DNI"
-                      maxLength={8}
-                      className="appearance-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="telefono"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Teléfono</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ingresa el teléfono"
-                      maxLength={9}
-                      className="appearance-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="genero"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Género</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona un género" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="masculino">Masculino</SelectItem>
-                      <SelectItem value="femenino">Femenino</SelectItem>
-                      <SelectItem value="otro">Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.watch("genero") === "femenino" && (
+    <div className="flex  my-10flex flex-col lg:flex-row justify-between mx-auto my-10 max-w-7xl gap-8 ">
+      <Card className="w-3/5">
+        <CardHeader>
+          <CardTitle className="text-center">Crear Paciente</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="grid grid-cols-2 gap-4"
+            >
               <FormField
                 control={form.control}
-                name="embarazos"
+                name="nombres"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Número de Embarazos</FormLabel>
+                    <FormLabel>Nombres</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ingresa los nombres" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="apellidos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellidos</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ingresa los apellidos" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dni"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>DNI</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Ingresa el DNI"
+                        maxLength={8}
+                        className="appearance-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="telefono"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Teléfono</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Ingresa el teléfono"
+                        maxLength={9}
+                        className="appearance-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="genero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Género</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un género" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="masculino">Masculino</SelectItem>
+                        <SelectItem value="femenino">Femenino</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {form.watch("genero") === "femenino" && (
+                <FormField
+                  control={form.control}
+                  name="embarazos"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de Embarazos</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Ingresa el número de embarazos"
+                          min="0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              <FormField
+                control={form.control}
+                name="presion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Presión Arterial</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="Ingresa el número de embarazos"
+                        placeholder="Ingresa la presión arterial"
+                        min="0"
+                        max="300"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="glucosa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Glucosa</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Ingresa la presión arterial"
+                        min="0"
+                        max="300"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="grosor"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Grosor de Piel</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Ingresa el grosor de piel"
                         min="0"
                         {...field}
                       />
@@ -276,161 +334,77 @@ export function CompCreatePacientes() {
                   </FormItem>
                 )}
               />
-            )}
-            <FormField
-              control={form.control}
-              name="presion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Presión Arterial</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa la presión arterial"
-                      min="0"
-                      max="300"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="glucosa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Glucosa</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa la presión arterial"
-                      min="0"
-                      max="300"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="grosor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Grosor de Piel</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa el grosor de piel"
-                      min="0"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="insulina"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Insulina</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa la insulina"
-                      min="0"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="imc"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>IMC</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa el IMC"
-                      min="1"
-                      max="100"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="insulina"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Insulina</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Ingresa la insulina"
+                        min="0"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="imc"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>IMC</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Ingresa el IMC"
+                        min="1"
+                        max="100"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* New Date of Birth field */}
-            <FormField
-              control={form.control}
-              name="fecha_de_nacimiento"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel>Fecha de Nacimiento</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                        
-                          variant={"outline"}
-                          className={`w-full pl-3 text-left font-normal ${
-                            !field.value && "text-muted-foreground"
-                          }`}
-                        >
-                          {field.value ? (
-                            format(field.value, "dd/MM/yyyy", {
-                              locale: es,
-                            })
-                          ) : (
-                            <span>Selecciona una fecha</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <div className="flex items-center justify-between p-2 border-b">
-                        <Select
-                        
-                          value={selectedYear.toString()}
-                          onValueChange={(value) => {
-                            const newYear = parseInt(value, 10);
-                            setSelectedYear(newYear);
-                            if (field.value) {
-                              const newDate = new Date(field.value);
-                              newDate.setFullYear(newYear);
-                              field.onChange(newDate);
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="w-[120px]">
-                            <SelectValue placeholder="Selecciona un año" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {years.map((year) => (
-                              <SelectItem key={year} value={year.toString()}>
-                                {year}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select >
-                        <div className="space-x-2">
+              {/* New Date of Birth field */}
+              <FormField
+                control={form.control}
+                name="fecha_de_nacimiento"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Fecha de Nacimiento</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
                           <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                              const newYear = selectedYear - 1;
+                            variant={"outline"}
+                            className={`w-full pl-3 text-left font-normal ${
+                              !field.value && "text-muted-foreground"
+                            }`}
+                          >
+                            {field.value ? (
+                              format(field.value, "dd/MM/yyyy", {
+                                locale: es,
+                              })
+                            ) : (
+                              <span>Selecciona una fecha</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <div className="flex items-center justify-between p-2 border-b">
+                          <Select
+                            value={selectedYear.toString()}
+                            onValueChange={(value) => {
+                              const newYear = parseInt(value, 10);
                               setSelectedYear(newYear);
                               if (field.value) {
                                 const newDate = new Date(field.value);
@@ -439,133 +413,212 @@ export function CompCreatePacientes() {
                               }
                             }}
                           >
-                            <ChevronUpIcon className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                              const newYear = selectedYear + 1;
-                              setSelectedYear(newYear);
-                              if (field.value) {
-                                const newDate = new Date(field.value);
-                                newDate.setFullYear(newYear);
-                                field.onChange(newDate);
-                              }
-                            }}
-                          >
-                            <ChevronDownIcon className="h-4 w-4" />
-                          </Button>
+                            <SelectTrigger className="w-[120px]">
+                              <SelectValue placeholder="Selecciona un año" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {years.map((year) => (
+                                <SelectItem key={year} value={year.toString()}>
+                                  {year}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <div className="space-x-2">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => {
+                                const newYear = selectedYear - 1;
+                                setSelectedYear(newYear);
+                                if (field.value) {
+                                  const newDate = new Date(field.value);
+                                  newDate.setFullYear(newYear);
+                                  field.onChange(newDate);
+                                }
+                              }}
+                            >
+                              <ChevronUpIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => {
+                                const newYear = selectedYear + 1;
+                                setSelectedYear(newYear);
+                                if (field.value) {
+                                  const newDate = new Date(field.value);
+                                  newDate.setFullYear(newYear);
+                                  field.onChange(newDate);
+                                }
+                              }}
+                            >
+                              <ChevronDownIcon className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-3" >
-                        <DayPicker
-                          mode="single"
-                          
-                          selected={field.value}
-                          onSelect={(date) => {
-                            if (date) {
-                              const newDate = new Date(date);
-                              newDate.setFullYear(selectedYear);
-                              field.onChange(newDate);
-                            } else {
-                              field.onChange(date);
+                        <div className="p-3">
+                          <DayPicker
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) => {
+                              if (date) {
+                                const newDate = new Date(date);
+                                newDate.setFullYear(selectedYear);
+                                field.onChange(newDate);
+                              } else {
+                                field.onChange(date);
+                              }
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
                             }
-                          }}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          fromYear={1900}
-                          toYear={new Date().getFullYear()}
-                          defaultMonth={
-                            field.value || new Date(selectedYear, 0)
-                          }
-                          locale={es}
-                          formatters={{
-                            formatCaption: (date, options) => {
-                              return format(date, "MMMM ", { locale: es });
-                            },
-                          }}
-                          classNames={{
-                
-                            caption:
-                              "flex justify-center pt-1 relative items-center",
-                            caption_label: "text-sm font-medium capitalize",
-                            nav: "space-x-1 flex items-center",
-                            nav_button:
-                              "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
-                            nav_button_previous: "absolute left-1",
-                            nav_button_next: "absolute right-1",
-                            table: "w-full border-collapse space-y-1",
-                            head_row: "flex",
-                            head_cell:
-                              "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] capitalize",
-                            row: "flex w-full mt-2",
-                            cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                            day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
-                            day_selected:
-                              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                            day_today: "bg-accent text-accent-foreground",
-                            day_outside: "text-muted-foreground opacity-50",
-                            day_disabled: "text-muted-foreground opacity-50",
-                            day_range_middle:
-                              "aria-selected:bg-accent aria-selected:text-accent-foreground",
-                            day_hidden: "invisible",
-                          }}
-                          components={{
-                            IconLeft: ({ ...props }) => (
-                              <ChevronLeftIcon className="h-4 w-4" />
-                            ),
-                            IconRight: ({ ...props }) => (
-                              <ChevronRightIcon className="h-4 w-4" />
-                            ),
-                          }}
-                        />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                            fromYear={1900}
+                            toYear={new Date().getFullYear()}
+                            defaultMonth={
+                              field.value || new Date(selectedYear, 0)
+                            }
+                            locale={es}
+                            formatters={{
+                              formatCaption: (date, options) => {
+                                return format(date, "MMMM ", { locale: es });
+                              },
+                            }}
+                            classNames={{
+                              caption:
+                                "flex justify-center pt-1 relative items-center",
+                              caption_label: "text-sm font-medium capitalize",
+                              nav: "space-x-1 flex items-center",
+                              nav_button:
+                                "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+                              nav_button_previous: "absolute left-1",
+                              nav_button_next: "absolute right-1",
+                              table: "w-full border-collapse space-y-1",
+                              head_row: "flex",
+                              head_cell:
+                                "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] capitalize",
+                              row: "flex w-full mt-2",
+                              cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                              day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
+                              day_selected:
+                                "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                              day_today: "bg-accent text-accent-foreground",
+                              day_outside: "text-muted-foreground opacity-50",
+                              day_disabled: "text-muted-foreground opacity-50",
+                              day_range_middle:
+                                "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                              day_hidden: "invisible",
+                            }}
+                            components={{
+                              IconLeft: ({ ...props }) => (
+                                <ChevronLeftIcon className="h-4 w-4" />
+                              ),
+                              IconRight: ({ ...props }) => (
+                                <ChevronRightIcon className="h-4 w-4" />
+                              ),
+                            }}
+                          />
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* New Factor Hereditario field */}
-            <FormField
-              control={form.control}
-              name="factor_hereditario"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Factor Hereditario</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ingresa el factor hereditario"
-                      min="0"
-                      max="100"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* New Factor Hereditario field */}
+              <FormField
+                control={form.control}
+                name="factor_hereditario"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Factor Hereditario</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Ingresa el factor hereditario"
+                        min="0"
+                        max="100"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <div className=" ph-23 col-span-2 flex justify-center items-center p-5">
-              <Link
-                to={"/"}
-                className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200"
-              >
-                Regresar
-              </Link>
-              <Button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200 ml-5">
-                Crear Paciente
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <div className=" ph-23 col-span-2 flex justify-center items-center p-5">
+                <Link
+                  to={"/"}
+                  className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200"
+                >
+                  Regresar
+                </Link>
+                <Button
+                  type="submit"
+                  className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200 ml-5"
+                >
+                  Crear Paciente
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full lg:w-1/2 bg-blue-50">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold mb-4 text-blue-800 text-center">
+            Información sobre los parámetros
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700">
+            <li>
+              <strong className="text-blue-700">Edad:</strong> La edad es un
+              factor de desarrollar diabetes aumenta con la edad.
+            </li>
+            <li>
+              <strong className="text-blue-700">Embarazos:</strong> El número de
+              veces que la paciente ha estado embarazada. El embarazo puede
+              afectar a la sensibilidad a la insulina, y un mayor número de
+              embarazos podría indicar un mayor riesgo de desarrollar diabetes.
+            </li>
+            <li>
+              <strong className="text-blue-700">Glucosa:</strong> Los niveles
+              elevados de glucosa son un principal indicador de diabetes.
+            </li>
+            <li>
+              <strong className="text-blue-700">Presión Arterial:</strong> La
+              hipertensión arterial se asocia a un mayor riesgo de diabetes y
+              sus complicaciones.
+            </li>
+            <li>
+              <strong className="text-blue-700">Insulina:</strong> Los niveles
+              anormales de insulina pueden ser un signo de resistencia a la
+              insulina, a menudo asociada a la diabetes.
+            </li>
+            <li>
+              <strong className="text-blue-700">IMC:</strong> Los valores más
+              altos de IMC indican obesidad, que es un importante factor de
+              riesgo de diabetes. (peso en kg/(altura en metros)^2).
+            </li>
+            <li>
+              <strong className="text-blue-700">Grosor de Piel:</strong> Esta
+              medida puede indicar la distribución de la grasa corporal, que
+              está relacionada con el riesgo de diabetes.
+            </li>
+            <li>
+              <strong className="text-blue-700">Factor Hereditario:</strong>{" "}
+              Esta función estima el impacto genético en la diabetes teniendo en
+              cuenta los antecedentes familiares, lo que ayuda a comprender el
+              riesgo hereditario.
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
