@@ -25,6 +25,8 @@ import TrashIcon from "../../Icons/TrashIcon";
 import {MainLayaout} from "../../layout";
 
 import {TableSkeleton} from "./TableSkeleton";
+import NumberFlow from "@number-flow/react";
+import { LogOutIcon } from "lucide-react";
 
 const URI_PREDICIONES = "http://localhost:4000/api/predictions";
 const URI_PACIENTES = "http://localhost:4000/api/pacientes";
@@ -76,18 +78,36 @@ const CompMostrarPacientes = () => {
     }
   };
 
-  return(
-    <MainLayaout>
+   const handleLogout = () => {
+     
+     localStorage.removeItem("loggedInUser");
+     
+     navigate("/login");
+   };
+
+  return (
+    <>
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Lista de Pacientes</h1>
-          <Link
-            to="/create"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
-          >
-            Agregar Paciente
-            <IconUserAdd className="w-4 h-4" />
-          </Link>
+
+          <div className="flex gap-5">
+            <Link
+              to="/create"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Agregar Paciente
+              <IconUserAdd className="w-4 h-4" />
+            </Link>
+            <Link
+              onClick={handleLogout}
+              to="/login"
+              className="bg-red-600 hover:bg-red-700 inline-flex items-center gap-2 px-4 py-2  text-white font-medium rounded-lg transition-colors"
+            >
+              Cerrar Sesión
+              <LogOutIcon/>
+            </Link>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -116,7 +136,7 @@ const CompMostrarPacientes = () => {
                     Género
                   </TableHead>
                   <TableHead className="text-center whitespace-nowrap">
-                    % Riesgo
+                    % de Riesgo
                   </TableHead>
                   <TableHead className="text-center whitespace-nowrap">
                     Acciones
@@ -163,14 +183,14 @@ const CompMostrarPacientes = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-2 justify-center">
-                        <Link to={`/view/${paciente.id}`}>
+                        {/* <Link to={`/view/${paciente.id}`}>
                           <Button
                             size="sm"
                             className="bg-green-600 hover:bg-green-700 text-white"
                           >
                             <EyeIcon className="w-4 h-4" />
                           </Button>
-                        </Link>
+                        </Link> */}
 
                         <Link to={`/edit/${paciente.id}`}>
                           <Button
@@ -197,7 +217,7 @@ const CompMostrarPacientes = () => {
           )}
         </div>
       </div>
-    </MainLayaout>
+    </>
   );
 };
 

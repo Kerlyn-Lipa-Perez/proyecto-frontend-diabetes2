@@ -39,6 +39,7 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { es } from "date-fns/locale";
 
+
 const formSchema = z.object({
   nombres: z
     .string()
@@ -78,7 +79,7 @@ const formSchema = z.object({
   presion: z
     .string()
     .regex(/^\d*$/, { message: "La presión arterial debe ser un número." })
-    .transform((val) => (val ? parseInt(val, 10) : 0)),
+     .transform((val) => (val ? parseInt(val, 10) : 0)),
   glucosa: z
     .string()
     .regex(/^\d*$/, { message: "La glucosa debe ser un número." })
@@ -87,10 +88,11 @@ const formSchema = z.object({
     .string()
     .regex(/^\d*$/, { message: "El grosor debe ser un número." })
     .transform((val) => (val ? parseInt(val, 10) : 0)),
+    
   insulina: z
     .string()
     .regex(/^\d*$/, { message: "La insulina debe ser un número." })
-    .transform((val) => (val ? parseInt(val, 10) : 0)),
+     .transform((val) => (val ? parseInt(val, 10) : 0)),
   imc: z
     .string()
     .regex(/^\d*\.?\d*$/, { message: "El IMC debe ser un número." })
@@ -117,7 +119,7 @@ export function CompCreatePacientes() {
       dni: "",
       telefono: "",
       genero: "",
-      embarazos: 0,
+      embarazos: "",
       presion: "",
       glucosa: "",
       grosor: "",
@@ -556,7 +558,7 @@ export function CompCreatePacientes() {
               >
                 Regresar
               </Link>
-              <Button className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200 ml-5">
+              <Button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6 align-middle flex transition-colors duration-200 ml-5">
                 Crear Paciente
               </Button>
             </div>

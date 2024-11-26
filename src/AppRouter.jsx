@@ -18,6 +18,7 @@ function AppRouter() {
         <Route path="/pacientes/create" element={<CompCreatePacientes />} />
         <Route path="/pacientes/view/:id" element={<EditarPacientes />} />
         <Route path="/pacientes/edit/:id" element={<EditarPacientes />} />
+        <Route path="/edit/:id" element={<EditarPacientes />} />
       </Routes>
     </BrowserRouter>
   );

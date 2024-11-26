@@ -54,6 +54,7 @@ function Registro() {
       const response = await axios
         .post(URI, formData)
         .then((res) => console.log("Registro exitoso", res))
+        .then((res) => navigate("/login"))
         .catch((err) => console.log("Error al registrar", err));
       if (response.status === 201) {
         console.log("Usuario registrado con éxito");
