@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import IconUserAdd from "../../Icons/IconUserAdd";
@@ -22,9 +22,9 @@ import EditIcon from "../../Icons/editIcon";
 
 import TrashIcon from "../../Icons/TrashIcon";
 
-import {MainLayaout} from "../../layout";
+import { MainLayaout } from "../../layout";
 
-import {TableSkeleton} from "./TableSkeleton";
+import { TableSkeleton } from "./TableSkeleton";
 import NumberFlow from "@number-flow/react";
 import { LogOutIcon } from "lucide-react";
 
@@ -53,7 +53,7 @@ const CompMostrarPacientes = () => {
         ? response.data
         : response.data.pacientes || [];
 
-      // Sort pacientes by most recent, with fallback to prevent errors
+      // Ordenar los pacientes por fecha de creación
       const sortedPacientes = pacientesData.sort((a, b) => {
         const dateA = a.createdAt || a.fecha_creacion || 0;
         const dateB = b.createdAt || b.fecha_creacion || 0;
@@ -61,13 +61,11 @@ const CompMostrarPacientes = () => {
       });
 
       setPacientes(sortedPacientes);
-      setLoading(false);
-
+      setLoading(true);
     } catch (error) {
       console.error("Error al obtener los pacientes:", error);
     }
   };
-
 
   const deletePaciente = async (id) => {
     try {
@@ -78,12 +76,11 @@ const CompMostrarPacientes = () => {
     }
   };
 
-   const handleLogout = () => {
-     
-     localStorage.removeItem("loggedInUser");
-     
-     navigate("/login");
-   };
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+
+    navigate("/login");
+  };
 
   return (
     <>
@@ -105,15 +102,12 @@ const CompMostrarPacientes = () => {
               className="bg-red-600 hover:bg-red-700 inline-flex items-center gap-2 px-4 py-2  text-white font-medium rounded-lg transition-colors"
             >
               Cerrar Sesión
-              <LogOutIcon/>
+              <LogOutIcon />
             </Link>
           </div>
         </div>
 
         <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-          {loading ? (
-            <TableSkeleton />
-          ) : (
             <Table>
               <TableCaption className="text-center p-3 pb-6">
                 No hay más registros...
@@ -143,7 +137,9 @@ const CompMostrarPacientes = () => {
                   </TableHead>
                 </TableRow>
               </TableHeader>
-
+              {loading ? (
+              <TableSkeleton />
+              ) : (
               <TableBody>
                 {pacientes.map((paciente) => (
                   <TableRow
@@ -212,9 +208,11 @@ const CompMostrarPacientes = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
+                </TableBody>
+
+              )}
             </Table>
-          )}
+          
         </div>
       </div>
     </>

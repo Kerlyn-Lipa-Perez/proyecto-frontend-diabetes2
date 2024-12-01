@@ -16,6 +16,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 const URI = "http://localhost:4000/api/register";
 
+
 function Registro() {
   const [formData, setFormData] = useState({
     nombre: "",

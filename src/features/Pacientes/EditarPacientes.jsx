@@ -150,8 +150,8 @@ const CompEditarPaciente = () => {
 
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  // Cargar los datos del paciente cuando se monta el componente
-  // Cargar los datos del paciente cuando se monta el componente
+ 
+  // Cargar los datos del paciente cuando se carga el componente
   useEffect(() => {
     const getPaciente = async () => {
       try {
